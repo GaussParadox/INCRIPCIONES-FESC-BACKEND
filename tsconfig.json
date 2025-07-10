@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                         // Versión de JS que genera
+    "module": "commonjs",                       // Tipo de módulo (Node usa commonjs)
+    "rootDir": "./src",                         // Carpeta donde están tus archivos .ts
+    "outDir": "./dist",                         // Carpeta donde se compilan los .js
+    "strict": true,                             // Verificaciones estrictas de tipos
+    "esModuleInterop": true,                    // Permite importar módulos tipo 'import express from ...'
+    "forceConsistentCasingInFileNames": true,   // Obliga a usar mayúsculas/minúsculas de forma consistente
+    "skipLibCheck": true                        // Acelera la compilación (omite revisión de .d.ts de libs)
+  },
+  "include": ["src"],                           // Solo compila archivos dentro de src/
+  "exclude": ["node_modules", "dist"]           // Ignora node_modules y dist/
+}
