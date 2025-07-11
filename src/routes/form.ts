@@ -1,18 +1,12 @@
 import { Router } from 'express';
-import {
-  getForms,
-  getFormById,
-  createForm,
-  updateForm,
-  deleteForm,
-} from '../controllers/formController';
+import { getFormularios,getFormularioById,postGuardarFormulario,generarYDescargarExcel} from '../controllers/formController';
 
 const router = Router();
 
-router.get('/', getForms);
-router.get('/:id', getFormById);
-router.post('/', createForm);
-router.put('/:id', updateForm);
-router.delete('/:id', deleteForm);
+
+router.get('/formularios', getFormularios);
+router.get('/formulario/:id', getFormularioById);
+router.post('/formulario', postGuardarFormulario);
+router.get('/formularios/excel', generarYDescargarExcel);
 
 export default router;

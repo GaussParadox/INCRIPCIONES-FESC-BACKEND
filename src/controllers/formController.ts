@@ -1,53 +1,52 @@
 import { Request, Response } from 'express';
-import { pool } from '../db/db';
-import { FormMaestro } from '../models/formInterfaces';
+import { formularioRepository } from '../modules/form.repository';
+import type { Formulario } from '../interfaces/form.interface';
+import { excelFormularios } from '../docs/formularios-generados-excel';
+import { formularioService } from '../modules/form.services';
 
-export const getForms = async (req: Request, res: Response) => {
-  const result = await pool.query('SELECT * FROM FORM_TMASTER');
-  res.json(result.rows);
+export const postGuardarFormulario = async (req: Request, res: Response) => {
+  try {
+    const data: Formulario = req.body;
+    const nuevoId = await formularioRepository.guardarFormulario(data);
+    res.status(201).json({ id: nuevoId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al guardar el formulario' });
+  }
 };
 
-export const getFormById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await pool.query('SELECT * FROM FORM_TMASTER WHERE FORMN_ID = $1', [id]);
-
-  if (result.rows.length === 0) return res.status(404).json({ message: 'No encontrado' });
-  res.json(result.rows[0]);
+export const getFormularioById = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const form = await formularioRepository.getFormularioById(id);
+    if (!form) {
+      return res.status(404).json({ message: 'Formulario no encontrado' });
+    }
+    res.json(form);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el formulario' });
+  }
 };
 
-export const createForm = async (req: Request, res: Response) => {
-  const data: FormMaestro = req.body;
-  const campos = Object.keys(data).join(', ');
-  const placeholders = Object.keys(data).map((_, i) => `$${i + 1}`).join(', ');
-  const valores = Object.values(data);
+export const getFormularios = async (_req: Request, res: Response) => {
+  try {
+    const formularios = await formularioRepository.getFormularios();
+    res.json(formularios);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los formularios' });
+  }
+}
+  export const generarYDescargarExcel = async (_req: Request, res: Response) => {
+  try {
+    const formularios = await formularioService.getFormularios();
+    const filePath = await excelFormularios.formulariosGenerados(formularios);
 
-  const result = await pool.query(
-    `INSERT INTO FORM_TMASTER (${campos}) VALUES (${placeholders}) RETURNING *`,
-    valores
-  );
-
-  res.status(201).json(result.rows[0]);
+    return res.download(filePath); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al generar o descargar el Excel' });
+  }
 };
 
-export const updateForm = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const data: FormMaestro = req.body;
-  const campos = Object.keys(data).map((key, i) => `${key} = $${i + 1}`).join(', ');
-  const valores = Object.values(data);
-
-  const result = await pool.query(
-    `UPDATE FORM_TMASTER SET ${campos} WHERE FORMN_ID = $${valores.length + 1} RETURNING *`,
-    [...valores, id]
-  );
-
-  if (result.rows.length === 0) return res.status(404).json({ message: 'No encontrado' });
-  res.json(result.rows[0]);
-};
-
-export const deleteForm = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await pool.query('DELETE FROM FORM_TMASTER WHERE FORMN_ID = $1 RETURNING *', [id]);
-
-  if (result.rows.length === 0) return res.status(404).json({ message: 'No encontrado' });
-  res.json({ message: 'Eliminado con éxito' });
-};
