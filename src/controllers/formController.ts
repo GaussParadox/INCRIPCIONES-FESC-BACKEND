@@ -38,6 +38,17 @@ export const getFormularios = async (_req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al obtener los formularios' });
   }
 }
+
+export const getProgramas = async (_req: Request, res: Response) => {
+  try {
+    const programas = await formularioService.getProgramas();
+    res.status(200).json(programas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los programas' });
+  }
+};
+
   export const generarYDescargarExcel = async (_req: Request, res: Response) => {
   try {
     const formularios = await formularioService.getFormularios();

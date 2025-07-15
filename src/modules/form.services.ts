@@ -14,6 +14,12 @@ export const formularioService = {
   getFormularios: async (): Promise<any[]> => {
     return await formularioRepository.getFormularios();
   },
+
+  getProgramas: async () => {
+    return await formularioRepository.getProgramas();
+  }
+
+  
 };
 
 

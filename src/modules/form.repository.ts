@@ -15,8 +15,16 @@ export const formularioRepository = {
           $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
         )
         RETURNING FORMN_ID;
-      `;
+      `;  
 
+      if (formulario.formd_fecha) {
+  const fecha = new Date(formulario.formd_fecha);
+  if (!isNaN(fecha.getTime())) {
+    formulario.formd_fecha = fecha.toISOString().split('T')[0]; 
+  } else {
+    throw new Error('Fecha inválida: ' + formulario.formd_fecha);
+  }
+}
         const values = [
         formulario.formv_nombre_prog_formacion,
         formulario.formv_nombres,
@@ -42,12 +50,16 @@ export const formularioRepository = {
         formulario.formv_forma_pago,
       ];
 
+            console.log('Valores recibidos para INSERT:', values);
 
             const result = await client.query(query, values);
             return result.rows[0].formn_id;
-        } finally {
+          } catch (error) {
+            console.error('Error en INSERT:', error);
+            throw error; 
+          } finally {
             client.release();
-        }
+          }
     },
     
   getFormularioById: async (formn_id: number): Promise<any> => {
@@ -79,4 +91,16 @@ export const formularioRepository = {
       client.release();
     }
   },
+
+  getProgramas: async (): Promise<{ id: number; programa: string }[]> => {
+  const client = await pool.connect();
+  try {
+    const query = `SELECT id, programa FROM programas ORDER BY programa ASC`;
+    const result = await client.query(query);
+    return result.rows;
+  } finally {
+    client.release();
+  }
+},
+
 };

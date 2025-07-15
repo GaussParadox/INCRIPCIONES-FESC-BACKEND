@@ -1,4 +1,5 @@
 export interface Formulario {
+  formn_id?: number; 
   formv_nombre_prog_formacion: string;
   formv_nombres: string;
   formv_apellidos: string;
