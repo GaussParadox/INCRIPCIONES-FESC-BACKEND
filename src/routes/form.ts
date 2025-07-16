@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getFormularios,getFormularioById,postGuardarFormulario,generarYDescargarExcel,getProgramas, getFormulariosResumen, getTotalInscritos, getTotalesPorPrograma} from '../controllers/formController';
+import { getFormularios,getFormularioById,postGuardarFormulario,generarYDescargarExcel,getProgramas, getFormulariosResumen, getTotalInscritos, getTotalesPorPrograma, getTotalProgramas, getProgramaConMasInscritos} from '../controllers/formController';
 
 const router = Router();
 
@@ -11,5 +11,9 @@ router.get('/programas', getProgramas);
 router.get('/formularios/resumen', getFormulariosResumen);
 router.get('/totalinscritos', getTotalInscritos);
 router.get('/totalesporprograma', getTotalesPorPrograma);
+router.get('/totalprogramas', getTotalProgramas);
+router.get("/programa-mas-inscritos", getProgramaConMasInscritos);
+
+
 
 export default router;

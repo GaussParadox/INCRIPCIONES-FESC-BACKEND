@@ -60,7 +60,7 @@ export const getFormulariosResumen = async (_req: Request, res: Response) => {
 export const getTotalInscritos = async (_req: Request, res: Response) => {
   try {
     const programas = await formularioService.getTotalInscritos();
-    res.status(200).json(programas);
+    res.status(200).json({ total: programas });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener los programas' });
@@ -76,6 +76,31 @@ export const getTotalesPorPrograma = async (_req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al obtener los totales por programa' });
   }
 };
+
+export const getTotalProgramas = async (_req: Request, res: Response) => {
+  try {
+    const total = await formularioService.getTotalProgramas();
+    res.status(200).json(total);
+  } catch (error) {
+    console.error("Error al obtener el total de programas:", error);
+    res.status(500).json({ message: "Error al obtener el total de programas" });
+  }
+};
+
+export const getProgramaConMasInscritos = async (_req: Request, res: Response) => {
+  try {
+    const data = await formularioService.getProgramaConMasInscritos();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error al obtener el programa con más inscritos:", error);
+    res.status(500).json({ message: "Error al obtener el programa con más inscritos" });
+  }
+};
+
+
+
+
+
 
 
 

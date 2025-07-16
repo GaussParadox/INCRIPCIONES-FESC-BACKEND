@@ -23,14 +23,22 @@ export const formularioService = {
     return await formularioRepository.getFormulariosResumen();
   },
   getTotalInscritos: async (): Promise<number> => {
-    return await formularioRepository.getTotalInscritos();
+    const result = await formularioRepository.getTotalInscritos();
+    return result.total;
   },
   
    getTotalesPorPrograma: async (): Promise<{ programa: string; total: number }[]> => {
     return await formularioRepository.getTotalesPorPrograma();
   },
 
-  
+  getTotalProgramas: async (): Promise<{ total: number }> => {
+  return await formularioRepository.getTotalProgramas();
+  },
+
+  getProgramaConMasInscritos: async (): Promise<{ programa: string; total_inscritos: number }> => {
+  return await formularioRepository.getProgramaConMasInscritos();
+  },
+
 
   
 };

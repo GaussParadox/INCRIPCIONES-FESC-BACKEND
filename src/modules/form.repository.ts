@@ -123,12 +123,12 @@ getFormulariosResumen: async (): Promise<any[]> => {
   }
 },
 
-getTotalInscritos: async (): Promise<number> => {
+getTotalInscritos: async (): Promise<{ total: number }> => {
   const client = await pool.connect();
   try {
     const query = `SELECT COUNT(*) AS total FROM FORM_TMASTER;`;
     const result = await client.query(query);
-    return parseInt(result.rows[0].total, 10);
+    return { total: parseInt(result.rows[0].total, 10) }; 
   } catch (error) {
     console.error("Error al obtener el total de inscritos:", error);
     throw error;
@@ -136,6 +136,7 @@ getTotalInscritos: async (): Promise<number> => {
     client.release();
   }
 },
+
 
 getTotalesPorPrograma: async (): Promise<{ programa: string; total: number }[]> => {
   const client = await pool.connect();
@@ -161,6 +162,39 @@ getTotalesPorPrograma: async (): Promise<{ programa: string; total: number }[]> 
   }
 },
 
+getTotalProgramas: async (): Promise<{ total: number }> => {
+  const client = await pool.connect();
+  try {
+    const query = `SELECT COUNT(*) AS total FROM programas`;
+    const result = await client.query(query);
+    return { total: parseInt(result.rows[0].total, 10) };
+  } finally {
+    client.release();
+  }
+},
+
+getProgramaConMasInscritos: async (): Promise<{ programa: string; total_inscritos: number }> => {
+  const client = await pool.connect();
+  try {
+    const query = `
+      SELECT FORMV_NOMBRE_PROG_FORMACION AS programa, COUNT(*) AS total_inscritos
+      FROM FORM_TMASTER
+      GROUP BY FORMV_NOMBRE_PROG_FORMACION
+      ORDER BY total_inscritos DESC
+      LIMIT 1;
+    `;
+    const result = await client.query(query);
+    if (result.rows.length === 0) {
+      throw new Error("No hay registros de formularios.");
+    }
+    return {
+      programa: result.rows[0].programa,
+      total_inscritos: parseInt(result.rows[0].total_inscritos, 10),
+    };
+  } finally {
+    client.release();
+  }
+},
 
 
 
