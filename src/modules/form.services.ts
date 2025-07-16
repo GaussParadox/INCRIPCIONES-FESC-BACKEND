@@ -17,7 +17,20 @@ export const formularioService = {
 
   getProgramas: async () => {
     return await formularioRepository.getProgramas();
-  }
+  },
+
+  getFormulariosResumen: async (): Promise<any[]> => {
+    return await formularioRepository.getFormulariosResumen();
+  },
+  getTotalInscritos: async (): Promise<number> => {
+    return await formularioRepository.getTotalInscritos();
+  },
+  
+   getTotalesPorPrograma: async (): Promise<{ programa: string; total: number }[]> => {
+    return await formularioRepository.getTotalesPorPrograma();
+  },
+
+  
 
   
 };

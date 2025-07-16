@@ -103,4 +103,65 @@ export const formularioRepository = {
   }
 },
 
+getFormulariosResumen: async (): Promise<any[]> => {
+  const client = await pool.connect();
+  try {
+    const query = `
+      SELECT FORMN_ID,FORMV_NOMBRE_PROG_FORMACION,FORMV_NOMBRES,FORMV_APELLIDOS,FORMD_FECHA,FORMV_IDENTIFICACION,
+      FORMV_CORREO_POSTULANTE,FORMV_CELULAR,FORMV_FORMA_PAGO,TO_CHAR(FORMD_FECHA, 'DD/MM/YYYY') AS fecha_formateada
+      FROM FORM_TMASTER
+      ORDER BY FORMN_ID DESC;
+    `;
+
+    const result = await client.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error al obtener formularios resumen:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+},
+
+getTotalInscritos: async (): Promise<number> => {
+  const client = await pool.connect();
+  try {
+    const query = `SELECT COUNT(*) AS total FROM FORM_TMASTER;`;
+    const result = await client.query(query);
+    return parseInt(result.rows[0].total, 10);
+  } catch (error) {
+    console.error("Error al obtener el total de inscritos:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+},
+
+getTotalesPorPrograma: async (): Promise<{ programa: string; total: number }[]> => {
+  const client = await pool.connect();
+  try {
+    const query = `
+      SELECT 
+        p.programa,
+        COUNT(f.formn_id) AS total
+      FROM programas p
+      LEFT JOIN form_tmaster f
+        ON f.formv_nombre_prog_formacion = p.programa
+      GROUP BY p.programa
+      ORDER BY p.programa ASC;
+    `;
+
+    const result = await client.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error al obtener totales por programa:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+},
+
+
+
+
 };
