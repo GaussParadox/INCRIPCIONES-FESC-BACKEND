@@ -77,6 +77,8 @@ export const formularioRepository = {
     }
   },
 
+  
+
   getFormularios: async (): Promise<any[]> => {
     const client = await pool.connect();
     try {
@@ -92,12 +94,43 @@ export const formularioRepository = {
     }
   },
 
+
+  crearPrograma: async (programa: string): Promise<number> => {
+  const client = await pool.connect();
+  try {
+    const form_tmaster_id = 1; // ID fijo para todos los programas
+    const query = `INSERT INTO programas (programa, form_tmaster_id) VALUES ($1, $2) RETURNING id;`;
+    const values = [programa, form_tmaster_id];
+    const result = await client.query(query, values);
+    return result.rows[0].id;
+  } catch (error) {
+    console.error('Error al crear el programa:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+},
+
+
   getProgramas: async (): Promise<{ id: number; programa: string }[]> => {
   const client = await pool.connect();
   try {
     const query = `SELECT id, programa FROM programas ORDER BY programa ASC`;
     const result = await client.query(query);
     return result.rows;
+  } finally {
+    client.release();
+  }
+},
+
+deletePrograma: async (id: number): Promise<void> => {
+  const client = await pool.connect();
+  try {
+    const query = `DELETE FROM programas WHERE id = $1`;
+    await client.query(query, [id]);
+  } catch (error) {
+    console.error('Error al eliminar el programa:', error);
+    throw error;
   } finally {
     client.release();
   }

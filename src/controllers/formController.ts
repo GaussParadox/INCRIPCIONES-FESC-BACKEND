@@ -49,6 +49,33 @@ export const getProgramas = async (_req: Request, res: Response) => {
   }
 };
 
+export const postCrearPrograma = async (req: Request, res: Response) => {
+  try {
+    const { programa } = req.body;
+
+    if (!programa || typeof programa !== 'string') {
+      return res.status(400).json({ message: 'El campo "programa" es obligatorio y debe ser un texto.' });
+    }
+
+    const id = await formularioService.crearPrograma(programa);
+    res.status(201).json({ message: 'Programa creado correctamente', id });
+  } catch (error) {
+    console.error('Error al crear el programa:', error);
+    res.status(500).json({ message: 'Error al crear el programa' });
+  }
+};
+
+export const deletePrograma = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10);
+  try {
+    await formularioRepository.deletePrograma(id);
+    res.status(200).json({ message: "Programa eliminado correctamente." });
+  } catch (error) {
+    console.error("Error al eliminar programa:", error);
+    res.status(500).json({ error: "Error al eliminar el programa." });
+  }
+};
+
   export const generarYDescargarExcel = async (_req: Request, res: Response) => {
   try {
     const formularios = await formularioService.getFormularios();
@@ -109,7 +136,6 @@ export const getProgramaConMasInscritos = async (_req: Request, res: Response) =
     res.status(500).json({ message: "Error al obtener el programa con más inscritos" });
   }
 };
-
 
 
 

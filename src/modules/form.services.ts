@@ -19,6 +19,16 @@ export const formularioService = {
     return await formularioRepository.getProgramas();
   },
 
+  crearPrograma: async (programa: string): Promise<number> => {
+  return await formularioRepository.crearPrograma(programa);
+},
+
+
+  deletePrograma: async (id: number): Promise<void> => {
+  await formularioRepository.deletePrograma(id);
+},
+
+
   getFormulariosResumen: async (): Promise<any[]> => {
     return await formularioRepository.getFormulariosResumen();
   },
