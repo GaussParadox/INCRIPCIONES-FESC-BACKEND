@@ -31,7 +31,7 @@ export const excelFormularios = {
         cell.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: 'FF4CAF50' },
+          fgColor: { argb: 'ef4444' },
         };
         cell.font = {
           bold: true,

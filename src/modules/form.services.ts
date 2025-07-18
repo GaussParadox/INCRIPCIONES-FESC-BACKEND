@@ -1,8 +1,13 @@
 
+import { get } from "axios";
 import { formularioRepository } from "./form.repository";
 
 export const formularioService = {
-    
+
+  postGuardarPreinscripcion: async (preinscripcion: any): Promise<number> => {
+    return await formularioRepository.guardarPreinscripcion(preinscripcion);
+  },
+  
   postGuardarFormulario: async (formulario: any): Promise<number> => {
     return await formularioRepository.guardarFormulario(formulario);
   },
@@ -13,6 +18,10 @@ export const formularioService = {
 
   getFormularios: async (): Promise<any[]> => {
     return await formularioRepository.getFormularios();
+  },
+
+  getFuentes: async (): Promise<any[]> => {
+    return await formularioRepository.getFuentes();
   },
 
   getProgramas: async () => {
@@ -41,6 +50,10 @@ export const formularioService = {
     return await formularioRepository.getTotalesPorPrograma();
   },
 
+  getTotalesPorFuente: async (): Promise<{ fuente: string; total: number }[]> => {
+    return await formularioRepository.getTotalesPorFuente();
+  },
+
   getTotalProgramas: async (): Promise<{ total: number }> => {
   return await formularioRepository.getTotalProgramas();
   },
@@ -48,6 +61,8 @@ export const formularioService = {
   getProgramaConMasInscritos: async (): Promise<{ programa: string; total_inscritos: number }> => {
   return await formularioRepository.getProgramaConMasInscritos();
   },
+  
+  
 
 
   

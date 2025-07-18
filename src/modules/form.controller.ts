@@ -2,6 +2,20 @@
 import { Request, Response } from 'express';
 import { formularioService } from './form.services';
 import { formularioRepository } from './form.repository';
+import { excelFormularios } from '../docs/formularios-generados-excel';
+
+export const postGuardarPreinscripcion = async (req: Request, res: Response) => {
+  try {
+    const preinscripcion = req.body;
+    console.log("Datos recibidos en el backend:", preinscripcion); 
+
+    const id = await formularioService.postGuardarPreinscripcion(preinscripcion);
+    res.status(201).json({ message: 'Preinscripción guardada correctamente', id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al guardar la preinscripción' });
+  }
+};
 
 
 export const postGuardarFormulario = async (req: Request, res: Response) => {
@@ -29,6 +43,16 @@ export const getFormularioById = async (req: Request, res: Response) => {
   }
 };
 
+export const getFuentes = async (_req: Request, res: Response) => {
+  try {
+    const fuentes = await formularioService.getFuentes();
+    res.status(200).json(fuentes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener las fuentes' });
+  }
+};
+
 export const getFormularios = async (_req: Request, res: Response) => {
   try {
     const data = await formularioService.getFormularios();
@@ -46,6 +70,18 @@ export const getFormularios = async (_req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener los programas' });
+  }
+};
+
+export const generarYDescargarExcel = async (_req: Request, res: Response) => {
+  try {
+    const formularios = await formularioService.getFormularios();
+    const filePath = await excelFormularios.formulariosGenerados(formularios);
+
+    return res.download(filePath); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al generar o descargar el Excel' });
   }
 };
 
@@ -104,6 +140,16 @@ export const getTotalesPorPrograma = async (_req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener los totales por programa' });
+  }
+};
+
+export const getTotalesPorFuente = async (_req: Request, res: Response) => {
+  try {
+    const totales = await formularioService.getTotalesPorFuente();
+    res.status(200).json(totales);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los totales por fuente' });
   }
 };
 

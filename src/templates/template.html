@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Formación Continua</title>
     <style>
+
+        
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
             margin: 0;
             background-color: white;
         }
+
+        input, .form-input {
+        box-sizing: border-box;
+    }
         .container {
             max-width: 900px;
             margin: 30px auto;
@@ -46,24 +52,44 @@
         }
         
         .section {
-            margin-bottom: 20px;
-            border: 1px solid black;
-            padding: 10px;
+        border: 1px solid black;
+        margin-bottom: 8px;
         }
         
         .section-title {
-            background-color: #f0f0f0;
-            font-weight: bold;
-            text-align: center;
-            padding: 5px;
-            margin: -10px -10px 10px -10px;
-            border-bottom: 1px solid black;
+        background: #eee;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 1px solid black;
+        padding: 2px;
+        font-size: 12px;
         }
         
         .form-row {
-            display: flex;
-            margin-bottom: 8px;
-            align-items: center;
+        display: flex;
+        padding: 4px;
+        font-size: 11px;
+        }
+
+        .form-column {
+        display: flex;
+        flex-direction: column;
+        margin-right: 20px;
+        }
+
+        .form-subrow {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+        }
+
+        .form-row .form-label {
+        min-width: 120px; /* Menos que antes */
+        font-size: 11px;
+        }
+
+        .form-row .form-input {
+        max-width: 180px;
         }
         
         .form-label {
@@ -73,13 +99,32 @@
         }
         
         .form-input {
-            flex: 1;
-            border: none;
-            border-bottom: 1px solid black;
-            padding: 2px;
-            background: transparent;
-        }
+        flex: 1;
+        border: none;
+        border-bottom: 1px solid black;
+        padding: 2px;
+        background: transparent;
+        min-width: 100px; /* Para evitar que se hagan demasiado pequeños */
+        max-width: 200px; /* Ajustar según necesidad */
+        overflow-wrap: break-word;
+    }
+
+    .fesc-table td {
+    border: 1px solid black;
+    padding: 4px 6px;
+    text-align: left;
+    font-size: 11px; /* Ajusta según necesidad */
+    word-break: break-word;
+}
         
+.checkbox {
+    width: 12px;
+    height: 12px;
+    border: 1px solid black;
+    display: inline-block;
+    margin-top: 0;
+}
+
         .checkbox-group {
             display: flex;
             gap: 15px;
@@ -183,6 +228,26 @@
             display: table;
             clear: both;
         }
+        .date-box {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-weight: bold;
+        }
+
+
+        .checkbox {
+        width: 16px;
+        height: 16px;
+        border: 1px solid black;
+        display: inline-block;
+        margin-top: 2px;
+        }
+
+        .checked {
+            background-color: black; /* o ✔ si prefieres usar contenido */
+        }
     </style>
 </head>
 <body>
@@ -190,7 +255,7 @@
         <table style="width:100%; border-collapse:collapse; margin-bottom:10px;">
             <tr>
                 <td rowspan="2" style="width:180px; border:1px solid black; text-align:center; vertical-align:middle;">
-                    <img src="file:///C:/Users/LENOVO/Desktop/INCRIPCIONES-FESC-BACKEND/src/templates/imagenfesc.png" alt="FESC" style="max-width:150px; max-height:60px;">
+                    <img src="/src/templates/LOGOFESC.png" alt="FESC" style="max-width:150px; max-height:60px;">
                 </td>
                 <td style="border:1px solid black; text-align:center; font-weight:bold; font-size:15px;">FORMULARIO DE INSCRIPCIÓN FORMACIÓN CONTINUA</td>
                 <td style="border:1px solid black; width:180px; font-size:12px; vertical-align:top;">
@@ -207,174 +272,192 @@
         
         <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 10px;">
             <div style="flex: 2;">
-                <div style="border: 1px solid black; padding: 8px; font-weight: normal; min-height: 28px;">
-                    Nombre del programa de formación continua
-                </div>
+            <div style="border: 1px solid black; padding: 8px; font-weight: bold; min-height: 28px;">
+                Nombre del programa de formación continua<br>
+                <span>{{NOMBRE_PROGRAMA}}</span>
+            </div>
             </div>
             <div class="date-section" style="flex: 1; margin-bottom: 0;">
-                <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">
-                    Fecha de diligenciamiento
-                </div>
-                <div class="date-row">
-                    <div class="date-box">DD</div>
-                    <div class="date-box">MM</div>
-                    <div class="date-box">AA</div>
-                </div>
+            <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">
+                Fecha de diligenciamiento
             </div>
+            <div class="date-row" style="display: flex; justify-content: center; gap: 5px;">
+                <div class="date-box">{{FECHA_DIA}}</div>
+                <div class="date-box">{{FECHA_MES}}</div>
+                <div class="date-box">{{FECHA_ANIO}}</div>
+            </div>
+            </div>
+
         </div>
         <div class="clearfix"></div>
         
         <div class="section">
-            <div class="section-title">1. INFORMACIÓN PERSONAL</div>
-            
-            <div class="form-row">
-                <div class="form-label">Nombres:</div>
-                <div class="form-input"></div>
-                <div class="form-label" style="margin-left: 20px;">Apellidos:</div>
-                <div class="form-input"></div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-label">Documento de Identidad:</div>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <span>T.I</span>
-                        <div class="checkbox"></div>
-                    </div>
-                    <div class="checkbox-item">
-                        <span>C.C</span>
-                        <div class="checkbox"></div>
-                    </div>
-                    <div class="checkbox-item">
-                        <span>C.E</span>
-                        <div class="checkbox"></div>
-                    </div>
-                    <div class="checkbox-item">
-                        <span>OTRO</span>
-                        <div class="checkbox"></div>
-                    </div>
-                </div>
-                <div class="form-label" style="margin-left: 20px;">Número:</div>
-                <div class="form-input"></div>
-                <div class="form-label" style="margin-left: 20px;">Expedida en:</div>
-                <div class="form-input"></div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-label">Dirección Residencia:</div>
-                <div class="form-input"></div>
-                <div class="form-label" style="margin-left: 20px;">Teléfono Fijo:</div>
-                <div class="form-input"></div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-label">Correo Electrónico Personal:</div>
-                <div class="form-input"></div>
-                <div class="form-label" style="margin-left: 20px;">Teléfono Celular:</div>
-                <div class="form-input"></div>
-            </div>
+        <div class="section-title">1. INFORMACIÓN PERSONAL</div>
+
+        <div class="form-row">
+            <div class="form-label">Nombres:</div>
+            <div class="form-input">{{NOMBRES}}</div>
+
+            <div class="form-label" style="margin-left: 20px;">Apellidos:</div>
+            <div class="form-input">{{APELLIDOS}}</div>
         </div>
+
+        <div class="form-row">
+            <div class="form-label">Documento de Identidad:</div>
+            <div class="checkbox-group">
+            <div class="checkbox-item">
+                <span>T.I</span>
+                <div class="checkbox {{CHECK_TI}}"></div>
+            </div>
+            <div class="checkbox-item">
+                <span>C.C</span>
+                <div class="checkbox {{CHECK_CC}}"></div>
+            </div>
+            <div class="checkbox-item">
+                <span>C.E</span>
+                <div class="checkbox {{CHECK_CE}}"></div>
+            </div>
+            <div class="checkbox-item">
+                <span>OTRO</span>
+                <div class="checkbox {{CHECK_OTRO}}"></div>
+            </div>
+            </div>
+
+            <div class="form-label" style="margin-left: 20px;">Número:</div>
+            <div class="form-input">{{IDENTIFICACION}}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">Expedida en:</div>
+            <div class="form-input">{{EXPEDICION}}</div>
+
+            <div class="form-label" style="margin-left: 20px;">Dirección Residencia:</div>
+            <div class="form-input">{{DIRECCION}}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">Teléfono Fijo:</div>
+            <div class="form-input">{{TELEFONO_FIJO}}</div>
+
+            <div class="form-label" style="margin-left: 20px;">Teléfono Celular:</div>
+            <div class="form-input">{{CELULAR}}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">Correo Electrónico Personal:</div>
+            <div class="form-input">{{CORREO}}</div>
+        </div>
+        </div>
+
         
         <div class="section">
             <div class="section-title">2. INFORMACIÓN LABORAL</div>
             
             <div class="form-row">
                 <div class="form-label">Empresa en la que labora:</div>
-                <div class="form-input"></div>
+                <div class="form-input">{{EMPRESA}}</div>
                 <div class="form-label" style="margin-left: 20px;">Cargo que desempeña:</div>
-                <div class="form-input"></div>
+                <div class="form-input">{{CARGO}}</div>
             </div>
             
             <div class="form-row">
                 <div class="form-label">Dirección oficina:</div>
-                <div class="form-input"></div>
+                <div class="form-input">{{DIRECCION_OFICINA}}</div>
                 <div class="form-label" style="margin-left: 20px;">Teléfono oficina:</div>
-                <div class="form-input"></div>
+                <div class="form-input">{{TELEFONO_OFICINA}}</div>
             </div>
             
             <div class="form-row">
                 <div class="form-label">Correo Electrónico:</div>
-                <div class="form-input" style="max-width: 350px;"></div>
+                <div class="form-input" style="max-width: 350px;">{{CORREO_OFICINA}}</div>
             </div>
         </div>
         
         <div class="section">
-            <div class="section-title">3. INFORMACIÓN ACADÉMICA</div>
-            
-            <div class="academic-section">
-                <div class="academic-left">
-                    <div class="form-label" style="margin-bottom: 10px;">Último Nivel de Estudios:</div>
-                    <div class="checkbox-item" style="margin-bottom: 5px;">
-                        <span>Bachiller:</span>
-                        <div class="checkbox"></div>
-                    </div>
-                    <div class="checkbox-item" style="margin-bottom: 5px;">
-                        <span>Técnico</span>
-                        <div class="form-input" style="width: 80px; margin-left: 10px;"></div>
-                    </div>
-                    <div class="checkbox-item" style="margin-bottom: 5px;">
-                        <span>Profesion</span>
-                        <div class="form-input" style="width: 80px; margin-left: 10px;"></div>
-                    </div>
-                    <div class="checkbox-item">
-                        <span>Postgrado</span>
-                        <div class="form-input" style="width: 80px; margin-left: 10px;"></div>
-                    </div>
-                </div>
-                
-                <div class="academic-right">
-                    <div class="form-row">
-                        <div class="form-label">Universidad:</div>
-                        <div class="form-input"></div>
-                    </div>
-                    
-                    <div class="program-row">
-                        <div class="form-label">Nombre del Programa Académico:</div>
-                        <div class="form-input program-name"></div>
-                        <div class="form-label">Año:</div>
-                        <div class="form-input program-year"></div>
-                    </div>
-                </div>
-            </div>
+ <div class="section">
+  <div class="section-title">3. INFORMACIÓN ACADÉMICA</div>
+
+  <div class="form-row" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div class="form-label">Último Nivel de Estudios:</div>
+      <div class="checkbox-group">
+        <div class="checkbox-item">
+          <span>Bachiller:</span>
+          <div class="checkbox {{CHECK_BACHILLER}}"></div>
         </div>
+        <div class="checkbox-item">
+          <span>Tecnólogo:</span>
+          <div class="checkbox {{CHECK_TECNOLOGO}}"></div>
+        </div>
+        <div class="checkbox-item">
+          <span>Profesional:</span>
+          <div class="checkbox {{CHECK_PROFESIONAL}}"></div>
+        </div>
+        <div class="checkbox-item">
+          <span>Posgrado:</span>
+          <div class="checkbox {{CHECK_POSGRADO}}"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-column" style="margin-left: 30px;">
+      <div class="form-subrow">
+        <div class="form-label">Universidad:</div>
+        <div class="form-input">{{UNIVERSIDAD}}</div>
+      </div>
+
+      <div class="form-subrow">
+        <div class="form-label">Nombre del Programa Académico:</div>
+        <div class="form-input">{{PROGRAMA_ACADEMICO}}</div>
+      </div>
+
+      <div class="form-subrow">
+        <div class="form-label">Año:</div>
+        <div class="form-input" style="width: 60px;">{{YEAR}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
         
         <div class="section">
             <div class="section-title">4. FORMA DE PAGO</div>
             <div class="payment-section">
-                <div class="payment-item">
-                    <span>Consignador</span>
-                    <div class="checkbox"></div>
-                </div>
-                <div class="payment-item">
-                    <span>Transferencia</span>
-                    <div class="checkbox"></div>
-                </div>
-                <div class="payment-item">
-                    <span>Pago Virtual</span>
-                    <div class="checkbox"></div>
-                </div>
-                <div class="payment-item">
-                    <span>Cheque</span>
-                    <div class="checkbox"></div>
-                </div>
-                <div class="payment-item">
-                    <span>Tarjeta (Débito o Crédito):</span>
-                    <div class="checkbox"></div>
-                </div>
-                <div class="payment-item">
-                    <span>Otra:</span>
-                    <div class="checkbox"></div>
-                </div>
+            <div class="payment-item">
+                <span>Consignación</span>
+                <div class="checkbox {{CHECK_CONSIGNACION}}"></div>
             </div>
-        </div>
+            <div class="payment-item">
+                <span>Transferencia</span>
+                <div class="checkbox {{CHECK_TRANSFERENCIA}}"></div>
+            </div>
+            <div class="payment-item">
+                <span>Pago virtual</span>
+                <div class="checkbox {{CHECK_PAGO_VIRTUAL}}"></div>
+            </div>
+            <div class="payment-item">
+                <span>Cheque</span>
+                <div class="checkbox {{CHECK_CHEQUE}}"></div>
+            </div>
+            <div class="payment-item">
+                <span>Tarjeta (débito o crédito):</span>
+                <div class="checkbox {{CHECK_TARJETA}}"></div>
+            </div>
+            <div class="payment-item">
+                <span>Otro:</span>
+                <div class="checkbox {{CHECK_OTROMONEY}}"></div>
+            </div>
+            </div>
+
         
         <div class="fesc-section">
             <table class="fesc-table">
                 <tr>
-                    <td class="center" style="font-weight:bold;">¿ERES EGRESADO FESC?</td>
-                    <td class="center">Sí <span style="display:inline-block; width:40px; border-bottom:1px solid black;"></span></td>
-                    <td class="center">No <span style="display:inline-block; width:40px; border-bottom:1px solid black;"></span></td>
+                <td class="center" style="font-weight:bold;">¿ERES EGRESADO FESC?</td>
+                <td class="center">Sí <span style="display:inline-block; width:40px; border-bottom:1px solid black; text-align:center;">{{MARK_EGRESADO_SI}}</span></td>
+                <td class="center">No <span style="display:inline-block; width:40px; border-bottom:1px solid black; text-align:center;">{{MARK_EGRESADO_NO}}</span></td>
                 </tr>
+
                 <tr>
                     <td colspan="3" style="height:100px; font-size:11px; padding:10px; text-align:justify; vertical-align:top;">
                         En cumplimiento con lo establecido en la Ley 1581 de 2012 sobre Protección de Datos Personales y su decreto reglamentario 1377 de 2013 la FESC informa que, garantiza la protección plena del derecho de Habeas Data a estudiantes, empleados, proveedores, usuarios y grupos de interés. Todos los datos suministrados voluntaria y libremente se encuentran incorporados en nuestras bases de datos y tienen por finalidad ser recolectados, almacenados, usados y tratados por la FESC para el correcto y natural ejercicio de sus actividades de formación, administrativas, financieras, comercial, así como el envío de boletines informativos físicos y electrónicos e información publicitaria, permitiendo a las dependencias (académicas y administrativas) recolectar, recaudar, almacenar, usar, circular, suprimir, procesar, compilar, intercambiar, dar tratamiento, actualizar, y disponer de los datos que han sido suministrados y que se han incorporado en distintas bases o bancos de datos, o en repositorios electrónicos de todo tipo con que cuenta la Institución. Se recuerda a los usuarios que podrán ejercer los derechos en conocer, actualizar, rectificar y suprimir sus datos personales que se encuentran en nuestros archivos, en cualquier momento y sin ningún costo, previa acreditación de su identidad. Para lo anterior pueden contactarse por escrito a la dirección Av. 4 #15-14 barrio La Playa en Cúcuta, o en la sede Ocaña en la dirección KDX 194-785 barrio Llano de los Alcaldes, vía universitaria; a través de correo electrónico habeasdata@fesc.edu.co, o al teléfono (037) 582 9292 Ext: 118. Para conocer más sobre nuestra Política de Tratamiento Protección de Datos puede consultar en http://www.fesc.edu.co/portal/index.php/informacion-institucional/normatividad/normatividad-interna.html

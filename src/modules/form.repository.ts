@@ -1,6 +1,43 @@
 import { pool } from "../db/db";
-import { Formulario } from '../interfaces/form.interface';
+import { Formulario, PreForm } from '../interfaces/form.interface';
 export const formularioRepository = {
+
+
+  guardarPreinscripcion: async (data: PreForm): Promise<number> => {
+  const client = await pool.connect();
+
+  try {
+    const query = `
+      INSERT INTO preform_tmaster (
+        preformv_nombres,
+        preformv_apellidos,
+        preformv_correo,
+        preformv_fuentes
+      )
+      VALUES ($1, $2, $3, $4)
+      RETURNING id;
+    `;
+
+    const values = [
+      data.preformv_nombres,
+      data.preformv_apellidos,
+      data.preformv_correo,
+      data.preformv_fuentes,
+    ];
+
+    console.log("Insertando preinscripción:", values);
+
+    const result = await client.query(query, values);
+    return result.rows[0].id;
+  } catch (error) {
+    console.error("Error al guardar preinscripción:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+},
+
+
     guardarFormulario: async (formulario: Formulario): Promise<number> => {
         const client = await pool.connect();
         try {
@@ -111,6 +148,18 @@ export const formularioRepository = {
   }
 },
 
+getFuentes: async (): Promise<{ id: number; fuente: string }[]> => {
+  const client = await pool.connect();
+  try {
+    const query = `SELECT id, fuente FROM fuentes ORDER BY fuente ASC`;
+    const result = await client.query(query);
+    return result.rows;
+  } finally {
+    client.release();
+  }
+},
+
+
 
   getProgramas: async (): Promise<{ id: number; programa: string }[]> => {
   const client = await pool.connect();
@@ -195,6 +244,31 @@ getTotalesPorPrograma: async (): Promise<{ programa: string; total: number }[]> 
   }
 },
 
+getTotalesPorFuente: async (): Promise<{ fuente: string; total: number }[]> => {
+  const client = await pool.connect();
+  try {
+    const query = `
+      SELECT 
+        f.fuente,
+        COUNT(p.id) AS total
+      FROM fuentes f
+      LEFT JOIN preform_tmaster p
+        ON p.preformv_fuentes = f.fuente
+      GROUP BY f.fuente
+      ORDER BY f.fuente ASC;
+    `;
+
+    const result = await client.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error al obtener totales por fuente:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+},
+
+
 getTotalProgramas: async (): Promise<{ total: number }> => {
   const client = await pool.connect();
   try {
@@ -228,7 +302,5 @@ getProgramaConMasInscritos: async (): Promise<{ programa: string; total_inscrito
     client.release();
   }
 },
-
-
 
 };

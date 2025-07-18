@@ -23,3 +23,10 @@ export interface Formulario {
   formv_egresado?: 'SI' | 'NO';
   formv_forma_pago?: string;
 }
+
+export interface PreForm{
+  preformv_nombres: string;
+  preformv_apellidos: string;
+  preformv_correo: string;
+  preformv_fuentes: string;
+}

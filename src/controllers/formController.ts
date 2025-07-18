@@ -3,6 +3,22 @@ import { formularioRepository } from '../modules/form.repository';
 import type { Formulario } from '../interfaces/form.interface';
 import { excelFormularios } from '../docs/formularios-generados-excel';
 import { formularioService } from '../modules/form.services';
+import { pdfFormularios } from '../docs/formpdf';
+
+
+export const postGuardarPreinscripcion = async (req: Request, res: Response) => {
+  try {
+    const preinscripcion = req.body;
+    console.log("Datos recibidos en el backend:", preinscripcion); 
+
+    const id = await formularioService.postGuardarPreinscripcion(preinscripcion);
+    res.status(201).json({ message: 'Preinscripción guardada correctamente', id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al guardar la preinscripción' });
+  }
+};
+
 
 export const postGuardarFormulario = async (req: Request, res: Response) => {
   try {
@@ -26,6 +42,16 @@ export const getFormularioById = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener el formulario' });
+  }
+};
+
+export const getFuentes = async (_req: Request, res: Response) => {
+  try {
+    const fuentes = await formularioService.getFuentes();
+    res.status(200).json(fuentes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener las fuentes' });
   }
 };
 
@@ -87,6 +113,25 @@ export const deletePrograma = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al generar o descargar el Excel' });
   }
 };
+
+export const descargarPDFFormulario = async (req: Request, res: Response) => {
+  try {
+    const formn_id = parseInt(req.params.id);
+    const filePath = await pdfFormularios.generarPDF(formn_id);
+
+    res.download(filePath, `formulario_${formn_id}.pdf`, (err) => {
+      if (err) {
+        console.error('Error enviando el PDF:', err);
+      }
+    });
+  } catch (error) {
+    console.error('Error al generar o enviar el PDF:', error);
+    res.status(500).json({ message: 'Error al generar o descargar el PDF' });
+  }
+};
+
+
+
 export const getFormulariosResumen = async (_req: Request, res: Response) => {
   try {
     const resumen = await formularioService.getFormulariosResumen();
@@ -114,6 +159,16 @@ export const getTotalesPorPrograma = async (_req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener los totales por programa' });
+  }
+};
+
+export const getTotalesPorFuente = async (_req: Request, res: Response) => {
+  try {
+    const totales = await formularioService.getTotalesPorFuente();
+    res.status(200).json(totales);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los totales por fuente' });
   }
 };
 
