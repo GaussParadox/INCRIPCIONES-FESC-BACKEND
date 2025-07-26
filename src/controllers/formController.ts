@@ -22,14 +22,20 @@ export const postGuardarPreinscripcion = async (req: Request, res: Response) => 
 
 export const postGuardarFormulario = async (req: Request, res: Response) => {
   try {
-    const data: Formulario = req.body;
-    const nuevoId = await formularioRepository.guardarFormulario(data);
-    res.status(201).json({ id: nuevoId });
-  } catch (error) {
+    const formulario = req.body;
+    const id = await formularioService.postGuardarFormulario(formulario);
+    res.status(200).json({ message: "Formulario guardado correctamente", id });
+  } catch (error: any) {
     console.error(error);
-    res.status(500).json({ message: 'Error al guardar el formulario' });
+
+    if (error.code === "DOCUMENTO_DUPLICADO") {
+      return res.status(409).json({ message: "Este formulario ya se ha respondido con tu número de identificación" });
+    }
+
+    res.status(500).json({ message: "Error al guardar el formulario" });
   }
 };
+
 
 export const getFormularioById = async (req: Request, res: Response) => {
   try {
@@ -191,6 +197,30 @@ export const getProgramaConMasInscritos = async (_req: Request, res: Response) =
     res.status(500).json({ message: "Error al obtener el programa con más inscritos" });
   }
 };
+
+export const getFuenteConMasInscritos = async (_req: Request, res: Response) => {
+  try {
+    const data = await formularioService.getFuenteConMasInscritos();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error al obtener la fuente con más inscritos:", error);
+    res.status(500).json({ message: "Error al obtener la fuente con más inscritos" });
+  }
+};
+
+export const getAdministradorByEmail = async (req: Request, res: Response) => {
+  try {
+    const email = req.params.email;
+    const administrador = await formularioService.getAdministradorByEmail(email);
+    if (!administrador) {
+      return res.status(404).json({ message: 'Administrador no encontrado' });
+    }
+    res.status(200).json(administrador);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el administrador' });
+  }
+}
 
 
 

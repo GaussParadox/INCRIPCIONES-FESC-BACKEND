@@ -22,6 +22,15 @@ export interface Formulario {
   formv_year?: number;
   formv_egresado?: 'SI' | 'NO';
   formv_forma_pago?: string;
+  formv_firma_base64?: string;
+  formv_documento_base64?: string;
+  formv_comprobante_pago_base64?: string;
+}
+
+export interface UsuariosAdministradores {
+  id: number;
+  email: string;
+  password: string;
 }
 
 export interface PreForm{
@@ -30,3 +39,10 @@ export interface PreForm{
   preformv_correo: string;
   preformv_fuentes: string;
 }
+
+export interface Logo {
+  id?: number; 
+  nombre: string;
+  imagen_base64: string;
+}
+

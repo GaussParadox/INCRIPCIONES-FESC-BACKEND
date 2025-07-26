@@ -7,6 +7,19 @@ export const pdfFormularios = {
   generarPDF: async (formn_id: number) => {
     const client = await pool.connect();
     try {
+
+      
+
+      const logoQuery = await client.query(`SELECT imagen_base64 FROM logos WHERE nombre = $1`, ['logoFESC']);
+      const rawLogo = logoQuery.rows[0]?.imagen_base64 || '';
+      const cleanLogo = rawLogo.replace(/\s/g, ''); // elimina espacios o saltos de línea si los hay
+
+      const logoBase64 = `data:image/png;base64,${cleanLogo}`;
+      
+      if (!logoBase64) {
+        throw new Error('Logo no encontrado');
+      }
+
       const query = `
         SELECT *, TO_CHAR(FORMD_FECHA, 'DD/MM/YYYY') AS fecha_formateada
         FROM FORM_TMASTER
@@ -49,7 +62,7 @@ export const pdfFormularios = {
         case 'bachiller':
           check_BACHILLER = 'checked';
           break;
-        case 'Tecnologo':
+        case 'tecnologo':
           check_TECNOLOGO = 'checked';
           break;
         case 'profesional':
@@ -159,7 +172,11 @@ export const pdfFormularios = {
         .replace('{{MARK_EGRESADO_SI}}', mark_EGRESADO_SI)
         .replace('{{MARK_EGRESADO_NO}}', mark_EGRESADO_NO)
         .replace('{{FECHA}}', form.fecha_formateada)
-        
+        .replace('{{FIRMA}}', form.formv_firma_base64 || '')
+        .replace('{{DOCUMENTO}}', form.formv_documento_base64 || '')
+        .replace('{{COMPROBANTE_PAGO}}', form.formv_comprobante_pago_base64 || '')
+        .replace('{{LOGO}}', logoBase64)
+
 
       const filePath = path.resolve(__dirname, `../../formulario_${formn_id}.pdf`);
       const browser = await puppeteer.launch();

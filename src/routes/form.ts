@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getFormularios, getTotalesPorFuente, postGuardarPreinscripcion ,getFuentes, getFormularioById,postGuardarFormulario,generarYDescargarExcel, descargarPDFFormulario, getProgramas, getFormulariosResumen, getTotalInscritos, getTotalesPorPrograma, getTotalProgramas, getProgramaConMasInscritos, postCrearPrograma, deletePrograma} from '../controllers/formController';
+import { getFormularios, getAdministradorByEmail ,getFuenteConMasInscritos ,getTotalesPorFuente, postGuardarPreinscripcion ,getFuentes, getFormularioById,postGuardarFormulario,generarYDescargarExcel, descargarPDFFormulario, getProgramas, getFormulariosResumen, getTotalInscritos, getTotalesPorPrograma, getTotalProgramas, getProgramaConMasInscritos, postCrearPrograma, deletePrograma} from '../controllers/formController';
 
 const router = Router();
 
@@ -19,6 +19,8 @@ router.get('/totalesporprograma', getTotalesPorPrograma);
 router.get('/totalesporfuente', getTotalesPorFuente);
 router.get('/totalprogramas', getTotalProgramas);
 router.get("/programa-mas-inscritos", getProgramaConMasInscritos);
+router.get("/fuente-mas-inscritos", getFuenteConMasInscritos);
+router.get('/administrador/:email', getAdministradorByEmail);
 
 
 

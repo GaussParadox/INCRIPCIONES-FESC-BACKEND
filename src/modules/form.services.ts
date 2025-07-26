@@ -61,6 +61,15 @@ export const formularioService = {
   getProgramaConMasInscritos: async (): Promise<{ programa: string; total_inscritos: number }> => {
   return await formularioRepository.getProgramaConMasInscritos();
   },
+
+  getFuenteConMasInscritos: async (): Promise<{ fuente: string; total_inscritos: number }> => {
+    return await formularioRepository.getFuenteConMasInscritos();
+  },
+
+  getAdministradorByEmail: async (email: string): Promise<any> => {
+    return await formularioRepository.getAdministradorByEmail(email);
+  }
+  
   
   
 
